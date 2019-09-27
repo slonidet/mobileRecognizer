@@ -102,7 +102,7 @@ Object.prototype.toString = function() {
     } else {
         return nativeObjectToString.call(this);
     }
-}
+};
 
 
 /**

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, TouchableOpacity, View, Button } from 'react-native';
+import { Text, View, Button } from 'react-native';
 
 
 export default class Home extends Component {
@@ -10,7 +10,7 @@ export default class Home extends Component {
         <Button
           title="Log In"
           onPress={() =>
-            this.props.navigation.navigate('LogIn')
+            this.props.navigation.navigate('Login')
           }
         />
       </View>

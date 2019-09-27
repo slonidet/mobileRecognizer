@@ -2,11 +2,11 @@
 import React, { PureComponent, Component } from 'react';
 import { AppRegistry, Text, TouchableOpacity, View } from 'react-native';
 import { RNCamera } from 'react-native-camera';
-import { createStore } from 'redux';
 import { connect, Provider } from 'react-redux';
 
 import AcceptModal from './app/components/acceptProduct';
 import AppNavigator from './app/appNavigator';
+import store from './app/store';
 import styles from './app/style';
 
 
@@ -43,7 +43,7 @@ const rootReducer = (state=initialState, action) => {
   }
 };
 
-const store = createStore(rootReducer);
+// const store = createStore(rootReducer);
 
 // class Container extends PureComponent {
 //   constructor(props) {
