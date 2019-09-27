@@ -1,9 +1,12 @@
+import AsyncStorage from '@react-native-community/async-storage';
+import axios from 'axios';
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Button, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { changeUser, changeIsAuthenticated } from '../store';
+import { TextInput } from 'react-native-gesture-handler';
 
 
 const mapStateToProps = (state) => {
@@ -14,6 +17,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
+  console.log('THIS IS MAP DISPATCHHHHHHHHHHHHHHHHHHHHHHH');
+  console.log(dispatch);
   return ({
     changeUser: bindActionCreators(changeUser, dispatch),
     changeIsAuthenticated: bindActionCreators(changeIsAuthenticated, dispatch),
@@ -30,13 +35,17 @@ class LogIn extends Component {
     this.signIn = this.signIn.bind(this);
   }
 
+  _storeToken = async (token) => {
+    await AsyncStorage.setItem('token', token);
+  }
+
   validate() {
-    if (state.username.length === 0) {
-      Logger.alert('Username is required');
+    if (this.state.username.length === 0) {
+      alert('Username is required');
       return false;
     }
     if (this.state.password.length === 0) {
-      Logger.alert('Password is required');
+      alert('Password is required');
       return false;
     }
     return true;
@@ -44,25 +53,36 @@ class LogIn extends Component {
 
   async signIn() {
     if (!this.validate()) return;
-    try {
-      const user = await this.props.signIn({
-        username: this.state.username,
-        password: this.state.password,
-      });
+    await axios.post('http://192.168.250.97:8000/profiles/login', {
+      "username": this.state.username,
+      "password": this.state.password,
+    }).then((response) => {
+      this._storeToken(response.data.token);
+      this.props.changeUser(response.data.user.username);
       this.props.navigation.navigate('Home');
-    } catch (error) {
+    }).catch((error) => {
       alert('Wrong Credentials!');
-    }
+    });
   }
 
   render() {
-    const user = this.props.user;
-    console.log('THIS IS PROPS');
-    console.log(this.props)
+    const user = this.props.user
     return (
       <View>
         <View>
-          <Text style={{ alignSelf: 'center', color: 'blue' }}>Or sign in with</Text>
+        <TextInput
+          onChangeText={(text)=>this.setState({username: text})}
+        />
+        <TextInput
+          secureTextEntry={true}
+          onChangeText={(text)=>this.setState({password: text})}
+        />
+        <Button
+          title="Log In"
+          onPress={() =>
+            this.signIn()
+          }
+        />
         </View>
         <Text>{user}</Text>
       </View>
