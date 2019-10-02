@@ -1,12 +1,9 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
-import { changeUser, changeIsAuthenticated } from '../store';
-import { TextInput } from 'react-native-gesture-handler';
 
 import Button from '../components/button';
 import Input from '../components/input';
@@ -27,14 +24,14 @@ const mapDispatchToProps = (dispatch) => {
   })
 };
 
-class LogIn extends Component {
+class SignUp extends Component {
   constructor(...args) {
     super(...args);
     this.state = {
       username: '',
       password: '',
     };
-    this.signIn = this.signIn.bind(this);
+    this.signUp = this.signUp.bind(this);
   }
 
   _storeToken = async (token) => {
@@ -53,20 +50,18 @@ class LogIn extends Component {
     return true;
   }
 
-  async signIn() {
+  async signUp() {
     if (!this.validate()) return;
-    await axios.post(settings.serverDomain + '/profiles/login', {
+    await axios.post(settings.serverDomain + '/profiles/register', {
       "username": this.state.username,
+      "email": this.state.email,
       "password": this.state.password,
     }).then((response) => {
       this._storeToken(response.data.token);
-      this.props.changeUser(response.data.user.username);
-      this.props.changeIsAuthenticated(true);
+      this.props.changeUser(response.data.username);
       this.props.navigation.navigate('Home');
     }).catch((error) => {
-      if (error.response.status === 400) {
-        alert('Wrong Credentials!');
-      }
+      alert(error.data);
     });
   }
 
@@ -86,17 +81,16 @@ class LogIn extends Component {
           isPassword={true}
         />
         <Button
-          text="Log In"
+          text="Sign Up"
           type="upper"
           pressFunc={() =>
-            this.signIn()
+            this.signUp()
           }
         />
         </View>
-        <Text>{user}</Text>
       </View>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LogIn);
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

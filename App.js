@@ -4,7 +4,7 @@ import { AppRegistry, Text, TouchableOpacity, View } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import { connect, Provider } from 'react-redux';
 
-import AcceptModal from './app/components/acceptProduct';
+import AcceptModal from './app/components/acceptModal';
 import AppNavigator from './app/appNavigator';
 import store from './app/store';
 import styles from './app/style';

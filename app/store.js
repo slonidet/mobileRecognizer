@@ -2,25 +2,43 @@ import { createStore } from 'redux';
 
 
 const initialState = {
-  isShown: false,
-  price: 0,
   isAuthenticated: false,
   currentUser: 'default user',
+  isShown: false,
+  price: 0,
+  currentCart: NaN,
+  cartCost: 0,
 };
 
 const ACTION_CHANGE_SHOWN = 'ACTION_CHANGE_SHOWN';
 const ACTION_CHANGE_PRICE = 'ACTION_CHANGE_PRICE';
 const ACTION_CHANGE_USER = 'ACTION_CHANGE_USER';
 const ACTION_CHANGE_ISAUTHENTICATED = 'ACTION_CHANGE_ISAUTHENTICATED';
+const ACTION_CHANGE_CURRENT_CART = 'ACTION_CHANGE_CURRENT_CART';
+const ACTION_CHANGE_CART_COST = 'ACTION_CHANGE_CART_COST';
 
-const changeShownModal = (isShown) => {
+export const changeCartCost = (cartCost) => {
+  return {
+    type: ACTION_CHANGE_CART_COST,
+    payload: cartCost
+  }
+}
+
+export const changeCurrentCart = (cartNum) => {
+  return {
+    type: ACTION_CHANGE_CURRENT_CART,
+    payload: cartNum
+  }
+};
+
+export const changeShownModal = (isShown) => {
   return {
     type: ACTION_CHANGE_SHOWN,
     payload: isShown
   }
 };
 
-const changePrice = (price) => {
+export const changePrice = (price) => {
   return {
     type: ACTION_CHANGE_PRICE,
     payload: price
@@ -49,6 +67,10 @@ const rootReducer = (state=initialState, action) => {
       return { ...state, price: action.payload };
     case ACTION_CHANGE_ISAUTHENTICATED:
       return { ...state, isAuthenticated: action.payload };
+    case ACTION_CHANGE_CURRENT_CART:
+      return { ...state, currentCart: action.payload };
+    case ACTION_CHANGE_CART_COST:
+      return { ...state, cartCost: action.payload };
     default:
       return state;
   }
